@@ -1,0 +1,10 @@
+# 临时 / 校验产物
+_mplugin_check*/
+*.bak
+*.bak-*
+*.zip
+.DS_Store
+Thumbs.db
+node_modules/
+
+# 交付的插件包要保留

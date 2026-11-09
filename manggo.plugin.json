@@ -1,0 +1,121 @@
+{
+  "manifestVersion": 1,
+  "id": "com.dsh.manggo.subtitle-cleaner",
+  "name": "字幕碎片清洗",
+  "version": "1.0.0",
+  "description": "纯本地清洗截图 OCR 英文字幕里的碎片：孤立括号、竖线、下划线、单字符噪声、拆断的行、时间轴行。毫秒级，不联网，不调用模型。",
+  "author": "DSH",
+  "runtime": {
+    "kind": "bun",
+    "api": "manggo.plugin.v1",
+    "main": "main.js"
+  },
+  "services": [
+    {
+      "id": "subtitle-cleaner",
+      "kind": "translation",
+      "displayName": "字幕碎片清洗",
+      "entry": "translate",
+      "resultType": "text",
+      "language": {
+        "auto": "auto",
+        "en_US": "en_US",
+        "zh_CN": "zh_CN",
+        "zh_TW": "zh_TW",
+        "ja_JP": "ja_JP",
+        "ko_KR": "ko_KR",
+        "fr_FR": "fr_FR",
+        "de_DE": "de_DE",
+        "ru_RU": "ru_RU"
+      },
+      "config": [
+        {
+          "key": "stripCodeSymbols",
+          "label": "删掉代码类符号",
+          "control": "boolean",
+          "default": true,
+          "description": "_ [ ] < > = + * # @ $ % 这些字符直接删除。看代码截图时建议关掉。"
+        },
+        {
+          "key": "dropShortLines",
+          "label": "丢弃短行阈值",
+          "control": "integer",
+          "default": 1,
+          "description": "一行里英文字母数不超过这个值就当碎片丢掉。1 表示只丢单字母行；填 2 会连 hi、ok 一起丢。"
+        },
+        {
+          "key": "joinBrokenLines",
+          "label": "拼回被拆断的句子",
+          "control": "boolean",
+          "default": true,
+          "description": "上一行没说完、下一行小写开头时拼成一句；连字符断词也会接上。"
+        },
+        {
+          "key": "minJoinLength",
+          "label": "拼句的最小行长",
+          "control": "integer",
+          "default": 20,
+          "description": "上一行至少这么长才参与拼句。调大更保守（宁可多留换行），调小更激进。"
+        },
+        {
+          "key": "dropTimestamps",
+          "label": "丢掉字幕时间轴行",
+          "control": "boolean",
+          "default": true,
+          "description": "00:01:23,456 --> 00:01:24,000 这类整行删除。"
+        },
+        {
+          "key": "keepParagraphs",
+          "label": "保留段落空行",
+          "control": "boolean",
+          "default": true,
+          "description": "关掉则把所有空行压成单换行，输出更紧凑。"
+        },
+        {
+          "key": "extraNoise",
+          "label": "额外要删的字符",
+          "control": "text",
+          "required": false,
+          "default": "",
+          "description": "逗号分隔，例如：※,●,→。会原样从文本里删掉。"
+        }
+      ]
+    },
+    {
+      "id": "clean-selection",
+      "kind": "action",
+      "displayName": "清洗碎片",
+      "iconName": "cleaning_services",
+      "entry": "cleanSelection",
+      "precheck": "hasText",
+      "enabledByDefault": true,
+      "config": [
+        {
+          "key": "stripCodeSymbols",
+          "label": "删掉代码类符号",
+          "control": "boolean",
+          "default": true
+        },
+        {
+          "key": "dropShortLines",
+          "label": "丢弃短行阈值",
+          "control": "integer",
+          "default": 1
+        },
+        {
+          "key": "joinBrokenLines",
+          "label": "拼回被拆断的句子",
+          "control": "boolean",
+          "default": true
+        },
+        {
+          "key": "extraNoise",
+          "label": "额外要删的字符",
+          "control": "text",
+          "required": false,
+          "default": ""
+        }
+      ]
+    }
+  ]
+}

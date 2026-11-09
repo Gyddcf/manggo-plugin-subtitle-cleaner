@@ -1,0 +1,2 @@
+# .mplugin 是 zip 二进制，别当文本处理
+*.mplugin binary
